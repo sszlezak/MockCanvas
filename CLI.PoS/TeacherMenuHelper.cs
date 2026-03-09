@@ -1,5 +1,5 @@
-using Library.PoS.Model;
-using Library.PoS.Services;
+using Library.Canvas.Model;
+using Library.Canvas.Services;
 
 namespace CLI.PoS
 {

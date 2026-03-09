@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.Canvas.Views.StudentCourseDetailView"
+             Title="Student Course Detail"
+             NavigatedTo="ContentPage_NavigatedTo">
+
+	<VerticalStackLayout Padding="20" Spacing="10">
+
+		<Label Text="{Binding CourseTitle}"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+		<Label Text="Assignments" FontAttributes="Bold" />
+		<ListView ItemsSource="{Binding Assignments}">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ViewCell>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="3*" />
+								<ColumnDefinition Width="2*" />
+							</Grid.ColumnDefinitions>
+							<Label Text="{Binding Name}" Grid.Column="0" />
+							<Label Text="{Binding DueDate}" Grid.Column="1" />
+						</Grid>
+					</ViewCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+
+		<Label Text="Modules" FontAttributes="Bold" />
+		<ListView ItemsSource="{Binding Modules}">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ViewCell>
+						<Label Text="{Binding Id}" />
+					</ViewCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+
+		<Label Text="Students in Course" FontAttributes="Bold" />
+		<ListView ItemsSource="{Binding Roster}">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ViewCell>
+						<Label Text="{Binding Name}" />
+					</ViewCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+
+		<Button Text="Go Back" Clicked="GoBackClicked" />
+
+	</VerticalStackLayout>
+</ContentPage>

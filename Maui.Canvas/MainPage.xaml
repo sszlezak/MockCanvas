@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.Canvas.MainPage"
+             Title="Main Menu">
+
+	<VerticalStackLayout
+        Padding="40"
+        Spacing="30"
+        VerticalOptions="Center"
+        HorizontalOptions="Center">
+
+		<Label
+            Text="Select Role"
+            FontSize="28"
+            FontAttributes="Bold"
+            HorizontalOptions="Center" />
+
+		<Button
+            Text="Login as Teacher"
+            Clicked="TeacherClicked"
+            WidthRequest="200"
+            HeightRequest="50" />
+
+		<Button
+            Text="Login as Student"
+            Clicked="StudentClicked"
+            WidthRequest="200"
+            HeightRequest="50" />
+
+	</VerticalStackLayout>
+
+</ContentPage>

@@ -1,5 +1,5 @@
-using Library.PoS.Model;
-using Library.PoS.Services;
+using Library.Canvas.Model;
+using Library.Canvas.Services;
 
 namespace CLI.PoS
 {
@@ -61,10 +61,10 @@ namespace CLI.PoS
 							break;
 						case 7:
 							Console.WriteLine("Assignment Menu: (not implemented yet)");
-							assignmentMenuHelper.PrintAssignmentMenu(course);
+							//assignmentMenuHelper.PrintAssignmentMenu(course);
 							break;
 						case 8:
-							moduleMenuHelper.PrintModuleMenu(course);
+							//moduleMenuHelper.PrintModuleMenu(course);
 							break;
 						case 9:
 							UnenrollStudent();

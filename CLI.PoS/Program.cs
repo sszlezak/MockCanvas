@@ -1,5 +1,5 @@
 ﻿using CLI.PoS;
-using Library.PoS.Model;
+using Library.Canvas.Model;
 
 namespace MockCanvas
 {

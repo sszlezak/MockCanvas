@@ -39,6 +39,34 @@
 			</CollectionView.ItemTemplate>
 		</CollectionView>
 
+		<!-- Assignment Management -->
+		<Label Text="Manage Assignments" FontAttributes="Bold" />
+
+		<CollectionView ItemsSource="{Binding Assignments}">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Grid Padding="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="4*" />
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Label Text="{Binding Name}" VerticalOptions="Center" />
+						<Button Text="Edit"
+                                Grid.Column="1"
+                                Clicked="EditAssignmentClicked"
+                                CommandParameter="{Binding .}" />
+						<Button Text="Delete"
+                                Grid.Column="2"
+                                Clicked="DeleteAssignmentClicked"
+                                CommandParameter="{Binding .}" />
+					</Grid>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Button Text="Add New Assignment" Clicked="AddAssignmentClicked" />
+
 		<!-- Assignment Picker -->
 		<Label Text="Select Assignment" FontAttributes="Bold" />
 

@@ -185,5 +185,55 @@ namespace Library.Canvas.Services
 			if (course == null) return;
 			courses.Remove(course);
 		}
+
+		// Add or update an assignment within a specific course
+		public Assignment? AddOrUpdateAssignment(int courseId, Assignment? assignment)
+		{
+			if (assignment == null) return null;
+
+			var course = GetById(courseId);
+			if (course == null) return null;
+
+			if (assignment.Id == 0)
+			{
+				// New assignment - assign next id based on all assignments in this course
+				assignment.Id = course.Assignments.Any() ? course.Assignments.Max(a => a.Id) + 1 : 1;
+				course.Assignments.Add(assignment);
+				return assignment;
+			}
+
+			var existing = course.Assignments.FirstOrDefault(a => a.Id == assignment.Id);
+			if (existing != null)
+			{
+				var index = course.Assignments.IndexOf(existing);
+				course.Assignments.RemoveAt(index);
+				course.Assignments.Insert(index, assignment);
+			}
+			else
+			{
+				course.Assignments.Add(assignment);
+			}
+			return assignment;
+		}
+
+		// Delete an assignment from a course, and also delete all submissions for that assignment
+		public void DeleteAssignment(int courseId, Assignment? assignment)
+		{
+			if (assignment == null) return;
+			var course = GetById(courseId);
+			if (course == null) return;
+
+			// Removing the assignment removes submissions automatically
+			assignment.Submissions.Clear(); // for clarity, but not strictly necessary
+			course.Assignments.Remove(assignment);
+		}
+
+		// Helper for the detail view: look up one assignment by course+id
+		public Assignment? GetAssignmentById(int courseId, int assignmentId)
+		{
+			var course = GetById(courseId);
+			if (course == null || assignmentId == 0) return null;
+			return course.Assignments.FirstOrDefault(a => a.Id == assignmentId);
+		}
 	}
 }

@@ -42,4 +42,9 @@
         ContentTemplate="{DataTemplate views:StudentSubmissionView}"
         Route="StudentSubmission" />
 
+	<ShellContent
+        Title="Assignment Detail"
+        ContentTemplate="{DataTemplate views:AssignmentDetailView}"
+        Route="AssignmentDetail" />
+
 </Shell>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.Canvas.Views.SubmissionDetailView"
+             Title="Grade Submission"
+             NavigatedTo="ContentPage_NavigatedTo">
+
+	<VerticalStackLayout>
+
+		<Label Text="{Binding AssignmentInfo}" FontAttributes="Bold" />
+
+		<Label Text="Student Response:" />
+		<Label Text="{Binding Submission.Content}" />
+
+		<Label Text="Points Earned:" />
+		<Entry x:Name="PointsEntry"
+           Keyboard="Numeric"
+           Placeholder="e.g. 85" />
+
+		<Label Text="Percentage:" />
+		<Entry x:Name="PercentEntry"
+           Keyboard="Numeric"
+           Placeholder="e.g. 92.5" />
+
+		<Label Text="Comment / Feedback:" />
+		<Editor x:Name="CommentEntry"
+            Placeholder="Leave feedback..."
+            MinimumHeightRequest="80" />
+
+		<Button Text="Save by Points" Clicked="SaveByPointsClicked" />
+		<Button Text="Save by Percent" Clicked="SaveByPercentClicked" />
+		<Button Text="Go Back" Clicked="GoBackClicked" />
+
+	</VerticalStackLayout>
+</ContentPage>

@@ -27,4 +27,19 @@
         ContentTemplate="{DataTemplate views:StudentCourseDetailView}"
         Route="StudentCourseDetail" />
 
+	<ShellContent 
+        Title="Teacher Course Detail"
+        ContentTemplate="{DataTemplate views:TeacherCourseDetailView}"
+        Route="TeacherCourseDetail" />
+
+	<ShellContent 
+        Title="Submission Detail"
+        ContentTemplate="{DataTemplate views:SubmissionDetailView}"
+        Route="SubmissionDetail" />
+
+	<ShellContent
+        Title="Student Submission"
+        ContentTemplate="{DataTemplate views:StudentSubmissionView}"
+        Route="StudentSubmission" />
+
 </Shell>

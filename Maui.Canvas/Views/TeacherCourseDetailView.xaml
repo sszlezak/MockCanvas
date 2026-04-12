@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.Canvas.Views.TeacherCourseDetailView"
+             Title="Course Detail"
+             NavigatedTo="ContentPage_NavigatedTo">
+
+	<VerticalStackLayout>
+
+		<Label Text="{Binding CourseTitle}"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+		<!-- Assignment Groups / Weights -->
+		<Label Text="Assignment Groups" FontAttributes="Bold" />
+
+		<CollectionView ItemsSource="{Binding AssignmentGroups}">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="3*" />
+							<ColumnDefinition Width="2*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Label Text="{Binding Name}"
+                               Grid.Column="0"
+                               VerticalOptions="Center" />
+						<Entry Text="{Binding Weight}"
+                               Grid.Column="1"
+                               Keyboard="Numeric"
+                               Placeholder="Weight" />
+						<Button Text="Save"
+                                Grid.Column="2"
+                                Clicked="SaveWeightClicked"
+                                CommandParameter="{Binding .}" />
+					</Grid>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<!-- Assignment Picker -->
+		<Label Text="Select Assignment" FontAttributes="Bold" />
+
+		<Picker Title="Choose an assignment"
+                ItemsSource="{Binding Assignments}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedAssignment}" />
+
+		<!-- Submissions -->
+		<Label Text="Submissions" FontAttributes="Bold" />
+
+		<CollectionView ItemsSource="{Binding Submissions}"
+                        SelectedItem="{Binding SelectedSubmission}"
+                        SelectionMode="Single">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="3*" />
+							<ColumnDefinition Width="2*" />
+							<ColumnDefinition Width="2*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Label Text="{Binding StudentName}" Grid.Column="0" VerticalOptions="Center" />
+						<Label Text="{Binding SubmittedOn}" Grid.Column="1" VerticalOptions="Center" />
+						<Label Text="{Binding GradeDisplay}" Grid.Column="2" VerticalOptions="Center" />
+						<Button Text="Grade"
+                                Grid.Column="3"
+                                Clicked="GradeClicked"
+                                CommandParameter="{Binding .}" />
+					</Grid>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Button Text="Go Back" Clicked="GoBackClicked" />
+
+	</VerticalStackLayout>
+</ContentPage>

@@ -54,9 +54,8 @@ public partial class TeacherCourseDetailView : ContentPage
 		var vm = BindingContext as TeacherCourseDetailViewModel;
 		if (vm?.Course == null) return;
 
-		// Navigate to the detail view with assignmentId=0 (signals "new")
-		// The course id: which course to save into
-		await Shell.Current.GoToAsync($"//AssignmentDetail?courseId={vm.Course.Id}&assignmentId=0");
+		AssignmentDetailView.CurrentCourseId = vm.Course.Id;
+		await Shell.Current.GoToAsync("//AssignmentDetail?assignmentId=0");
 	}
 
 	private async void EditAssignmentClicked(object sender, EventArgs e)
@@ -67,7 +66,8 @@ public partial class TeacherCourseDetailView : ContentPage
 			var vm = BindingContext as TeacherCourseDetailViewModel;
 			if (vm?.Course == null) return;
 
-			await Shell.Current.GoToAsync($"//AssignmentDetail?courseId={vm.Course.Id}&assignmentId={assignment.Id}");
+			AssignmentDetailView.CurrentCourseId = vm.Course.Id;
+			await Shell.Current.GoToAsync($"//AssignmentDetail?assignmentId={assignment.Id}");
 		}
 	}
 
@@ -88,6 +88,48 @@ public partial class TeacherCourseDetailView : ContentPage
 			if (vm?.Course == null) return;
 
 			CourseServiceProxy.Current.DeleteAssignment(vm.Course.Id, assignment);
+			vm.Refresh(); // Re-bind the list so the deleted row disappears
+		}
+	}
+
+	private async void AddModuleClicked(object sender, EventArgs e)
+	{
+		var vm = BindingContext as TeacherCourseDetailViewModel;
+		if (vm?.Course == null) return;
+
+		ModuleDetailView.CurrentCourseId = vm.Course.Id;
+		await Shell.Current.GoToAsync("//ModuleDetail?moduleId=0");
+	}
+
+	private async void EditModuleClicked(object sender, EventArgs e)
+	{
+		if (sender is Button btn && btn.CommandParameter is Module module)
+		{
+			var vm = BindingContext as TeacherCourseDetailViewModel;
+			if (vm?.Course == null) return;
+
+			ModuleDetailView.CurrentCourseId = vm.Course.Id;
+			await Shell.Current.GoToAsync($"//ModuleDetail?moduleId={module.Id}");
+		}
+	}
+
+	private async void DeleteModuleClicked(object sender, EventArgs e)
+	{
+		if (sender is Button btn && btn.CommandParameter is Module module)
+		{
+			// Confirm before destroying data. DisplayAlert with two buttons returns
+			// true if the user pressed the first, false for the second
+			bool confirm = await DisplayAlert(
+				"Delete Module",
+				$"Delete 'Module {module.Id}' and all its submissions?",
+				"Delete", "Cancel");
+
+			if (!confirm) return;
+
+			var vm = BindingContext as TeacherCourseDetailViewModel;
+			if (vm?.Course == null) return;
+
+			CourseServiceProxy.Current.DeleteModule(vm.Course.Id, module);
 			vm.Refresh(); // Re-bind the list so the deleted row disappears
 		}
 	}

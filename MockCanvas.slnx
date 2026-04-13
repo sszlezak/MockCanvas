@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="CLI.PoS/CLI.PoS.csproj" />
   <Project Path="Library.Canvas/Library.Canvas.csproj" />
   <Project Path="Maui.Canvas/Maui.Canvas.csproj" />
 </Solution>

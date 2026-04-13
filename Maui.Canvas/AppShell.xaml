@@ -47,4 +47,24 @@
         ContentTemplate="{DataTemplate views:AssignmentDetailView}"
         Route="AssignmentDetail" />
 
+	<ShellContent
+        Title="Module Detail"
+        ContentTemplate="{DataTemplate views:ModuleDetailView}"
+        Route="ModuleDetail" />
+
+	<ShellContent
+        Title="Page Content"
+        ContentTemplate="{DataTemplate views:PageContentDetailView}"
+        Route="PageContentDetail" />
+
+	<ShellContent
+        Title="File Content"
+        ContentTemplate="{DataTemplate views:FileContentDetailView}"
+        Route="FileContentDetail" />
+
+	<ShellContent
+        Title="Assignment Reference"
+        ContentTemplate="{DataTemplate views:AssignmentRefContentDetailView}"
+        Route="AssignmentRefContentDetail" />
+
 </Shell>

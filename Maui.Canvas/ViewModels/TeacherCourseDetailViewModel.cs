@@ -47,6 +47,15 @@ namespace Maui.Canvas.ViewModels
 			}
 		}
 
+		public ObservableCollection<Module> Modules
+		{
+			get
+			{
+				if (Course == null) return new ObservableCollection<Module>();
+				return new ObservableCollection<Module>(Course.Modules);
+			}
+		}
+
 		public ObservableCollection<SubmissionEntry> Submissions
 		{
 			get
@@ -79,6 +88,7 @@ namespace Maui.Canvas.ViewModels
 			NotifyPropertyChanged("AssignmentGroups");
 			NotifyPropertyChanged("Assignments");
 			NotifyPropertyChanged("Submissions");
+			NotifyPropertyChanged("Modules");
 		}
 
 		public event PropertyChangedEventHandler? PropertyChanged;

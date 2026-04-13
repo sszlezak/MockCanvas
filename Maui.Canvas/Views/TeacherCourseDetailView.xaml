@@ -65,7 +65,34 @@
 			</CollectionView.ItemTemplate>
 		</CollectionView>
 
+		<!-- Module Management -->
+		<Label Text="Manage Modules" FontAttributes="Bold" />
+
+		<CollectionView ItemsSource="{Binding Modules}">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Grid Padding="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="4*" />
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Label Text="{Binding Id, StringFormat='Module {0}'}" VerticalOptions="Center" />
+						<Button Text="Edit"
+                        Grid.Column="1"
+                        Clicked="EditModuleClicked"
+                        CommandParameter="{Binding .}" />
+						<Button Text="Delete"
+                        Grid.Column="2"
+                        Clicked="DeleteModuleClicked"
+                        CommandParameter="{Binding .}" />
+					</Grid>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
 		<Button Text="Add New Assignment" Clicked="AddAssignmentClicked" />
+		<Button Text="Add New Module" Clicked="AddModuleClicked" />
 
 		<!-- Assignment Picker -->
 		<Label Text="Select Assignment" FontAttributes="Bold" />

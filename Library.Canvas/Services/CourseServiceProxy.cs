@@ -235,5 +235,94 @@ namespace Library.Canvas.Services
 			if (course == null || assignmentId == 0) return null;
 			return course.Assignments.FirstOrDefault(a => a.Id == assignmentId);
 		}
+
+		public Module? AddOrUpdateModule(int courseId, Module? module)
+		{
+			if (module == null) return null;
+
+			var course = GetById(courseId);
+			if (course == null) return null;
+
+			if (module.Id == 0)
+			{
+				module.Id = course.Modules.Any() ? course.Modules.Max(a => a.Id) + 1 : 1;
+				course.Modules.Add(module);
+				return module;
+			}
+
+			var existing = course.Modules.FirstOrDefault(a => a.Id == module.Id);
+			if (existing != null)
+			{
+				var index = course.Modules.IndexOf(existing);
+				course.Modules.RemoveAt(index);
+				course.Modules.Insert(index, module);
+			}
+			else
+			{
+				course.Modules.Add(module);
+			}
+			return module;
+		}
+
+		public void DeleteModule(int courseId, Module? module)
+		{
+			if (module == null) return;
+			var course = GetById(courseId);
+			if (course == null) return;
+
+			module.Content.Clear();
+			course.Modules.Remove(module);
+		}
+
+		public Module? GetModuleById(int courseId, int moduleId)
+		{
+			var course = GetById(courseId);
+			if (course == null || moduleId == 0) return null;
+			return course.Modules.FirstOrDefault(m => m.Id == moduleId);
+		}
+
+		// Add or update a piece of content within a specific module of a course
+		public ModuleContent? AddOrUpdateModuleContent(int courseId, int moduleId, ModuleContent? content)
+		{
+			if (content == null) return null;
+			var module = GetModuleById(courseId, moduleId);
+			if (module == null) return null;
+
+			if (content.Id == 0)
+			{
+				content.Id = module.Content.Any() ? module.Content.Max(c => c.Id) + 1 : 1;
+				module.Content.Add(content);
+				return content;
+			}
+
+			var existing = module.Content.FirstOrDefault(c => c.Id == content.Id);
+			if (existing != null)
+			{
+				var index = module.Content.IndexOf(existing);
+				module.Content.RemoveAt(index);
+				module.Content.Insert(index, content);
+			}
+			else
+			{
+				module.Content.Add(content);
+			}
+			return content;
+		}
+
+		public void DeleteModuleContent(int courseId, int moduleId, ModuleContent? content)
+		{
+			if (content == null) return;
+			var module = GetModuleById(courseId, moduleId);
+			if (module == null) return;
+			module.Content.Remove(content);
+		}
+
+		// Look up one piece of content; Used by the content detail views
+		public ModuleContent? GetModuleContentById(int courseId, int moduleId, int contentId)
+		{
+			var module = GetModuleById(courseId, moduleId);
+			if (module == null || contentId == 0) return null;
+			return module.Content.FirstOrDefault(c => c.Id == contentId);
+		}
 	}
 }

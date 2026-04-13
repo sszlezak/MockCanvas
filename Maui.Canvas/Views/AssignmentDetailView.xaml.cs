@@ -3,15 +3,10 @@ using Library.Canvas.Services;
 
 namespace Maui.Canvas.Views;
 
-// QueryProperty attributes wire up URL parameters to C# properties
-// When someone navigates here with "?courseId=5&assignmentId=2",
-// MAUI automatically sets CourseId=5 and AssignmentId=2 before NavigatedTo fires
-// Recommended MAUI way to pass data between pages
-[QueryProperty(nameof(CourseId), "courseId")]
 [QueryProperty(nameof(AssignmentId), "assignmentId")]
 public partial class AssignmentDetailView : ContentPage
 {
-	public int CourseId { get; set; }
+	public static int CurrentCourseId { get; set; }
 	public int AssignmentId { get; set; }
 
 	public AssignmentDetailView()
@@ -32,7 +27,7 @@ public partial class AssignmentDetailView : ContentPage
 		else // Otherwise, look up the existing one and bind to it
 		{
 			BindingContext = CourseServiceProxy.Current
-				.GetAssignmentById(CourseId, AssignmentId)
+				.GetAssignmentById(CurrentCourseId, AssignmentId)
 				?? new Assignment();
 		}
 	}
@@ -42,7 +37,7 @@ public partial class AssignmentDetailView : ContentPage
 		// The BindingContext is the Assignment being edited
 		// Entry bindings in XAML write directly to its properties
 		var assignment = BindingContext as Assignment;
-		CourseServiceProxy.Current.AddOrUpdateAssignment(CourseId, assignment);
+		CourseServiceProxy.Current.AddOrUpdateAssignment(CurrentCourseId, assignment);
 
 		await Shell.Current.GoToAsync("//TeacherCourseDetail");
 	}

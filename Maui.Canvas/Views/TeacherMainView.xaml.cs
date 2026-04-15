@@ -28,6 +28,11 @@ public partial class TeacherMainView : ContentPage
 		await Shell.Current.GoToAsync("//TeacherCourseDetail");
 	}
 
+	private async void ManageStudentsClicked(object sender, EventArgs e)
+	{
+		await Shell.Current.GoToAsync("//StudentManagement");
+	}
+
 	private void GoBackClicked(object sender, EventArgs e)
 	{
 		Shell.Current.GoToAsync("//MainPage");

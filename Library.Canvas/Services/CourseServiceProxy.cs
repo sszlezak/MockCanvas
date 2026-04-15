@@ -344,5 +344,110 @@ namespace Library.Canvas.Services
 			if (stu == null) return;
 			course.Roster.Remove(stu);
 		}
+
+		// Export a course's roster as CSV text.
+		// Returns a string like:
+		//   Id,Name,Code,Classification
+		//   1,Alice Johnson,aj22a,Junior
+		//   2,Bob Martinez,bm23b,Sophomore
+		public string ExportRosterAsCsv(int courseId)
+		{
+			var course = GetById(courseId);
+			if (course == null) return "";
+
+			var sb = new System.Text.StringBuilder();
+			sb.AppendLine("Id,Name,Code,Classification");
+
+			foreach (var student in course.Roster)
+			{
+				// Wrap Name in quotes in case it contains commas.
+				sb.AppendLine($"{student.Id},\"{student.Name}\",{student.Code},{student.Classification}");
+			}
+
+			return sb.ToString();
+		}
+
+		// Import students from CSV text into a course's roster.
+		// Idempotent: skips students already enrolled.
+		// Non-destructive: doesn't remove students not in the file.
+		// If a student Id from the CSV exists in StudentServiceProxy,
+		// the existing student is used. Otherwise a new student is created.
+		public int ImportRosterFromCsv(int courseId, string csvText)
+		{
+			var course = GetById(courseId);
+			if (course == null) return 0;
+
+			var lines = csvText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+			int imported = 0;
+
+			// Skip the header row (line 0).
+			for (int i = 1; i < lines.Length; i++)
+			{
+				var line = lines[i].Trim();
+				if (string.IsNullOrEmpty(line)) continue;
+
+				// Simple CSV parse — handle quoted names.
+				var parts = ParseCsvLine(line);
+				if (parts.Count < 4) continue;
+
+				if (!int.TryParse(parts[0], out int studentId)) continue;
+
+				// Check if this student already exists in the university.
+				var student = StudentServiceProxy.Current.GetById(studentId);
+
+				if (student == null)
+				{
+					// Student doesn't exist — create them.
+					student = new Student
+					{
+						Id = studentId,
+						Name = parts[1],
+						Code = parts[2],
+						Classification = parts[3]
+					};
+					StudentServiceProxy.Current.AddOrUpdate(student);
+				}
+
+				// Idempotent: only add if not already enrolled.
+				if (!course.Roster.Any(r => r.Id == student.Id))
+				{
+					course.Roster.Add(student);
+					imported++;
+				}
+			}
+
+			return imported;
+		}
+
+		// Simple CSV line parser that handles quoted fields.
+		// "Alice Johnson",aj22a -> ["Alice Johnson", "aj22a"]
+		private List<string> ParseCsvLine(string line)
+		{
+			var result = new List<string>();
+			bool inQuotes = false;
+			var current = new System.Text.StringBuilder(); // an efficient way to build a long string piece by piece
+
+			for (int i = 0; i < line.Length; i++)
+			{
+				char c = line[i];
+
+				if (c == '"')
+				{
+					inQuotes = !inQuotes;
+				}
+				else if (c == ',' && !inQuotes)
+				{
+					result.Add(current.ToString().Trim());
+					current.Clear();
+				}
+				else
+				{
+					current.Append(c);
+				}
+			}
+
+			result.Add(current.ToString().Trim());
+			return result;
+		}
 	}
 }

@@ -161,6 +161,59 @@ public partial class TeacherCourseDetailView : ContentPage
 		}
 	}
 
+	private async void ExportRosterClicked(object sender, EventArgs e)
+	{
+		var vm = BindingContext as TeacherCourseDetailViewModel;
+		if (vm?.Course == null) return;
+
+		var csv = CourseServiceProxy.Current.ExportRosterAsCsv(vm.Course.Id);
+
+		// Write to a temp file, then let the user save it.
+		var fileName = $"{vm.Course.Code}_roster.csv";
+		var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+		File.WriteAllText(filePath, csv);
+
+		// ShareFile opens the system share dialog so the user can save/email/etc.
+		await Share.Default.RequestAsync(new ShareFileRequest
+		{
+			Title = $"Export {vm.Course.Code} Roster",
+			File = new ShareFile(filePath)
+		});
+	}
+
+	private async void ImportRosterClicked(object sender, EventArgs e)
+	{
+		var vm = BindingContext as TeacherCourseDetailViewModel;
+		if (vm?.Course == null) return;
+
+		try
+		{
+			// FilePicker opens the system file browser.
+			var result = await FilePicker.Default.PickAsync(new PickOptions
+			{
+				PickerTitle = "Select a roster CSV file",
+				FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+				{
+					{ DevicePlatform.WinUI, new[] { ".csv" } },
+					{ DevicePlatform.Android, new[] { "text/csv" } },
+					{ DevicePlatform.iOS, new[] { "public.comma-separated-values-text" } }
+				})
+			});
+
+			if (result == null) return;  // User cancelled.
+
+			var csvText = await File.ReadAllTextAsync(result.FullPath);
+			var count = CourseServiceProxy.Current.ImportRosterFromCsv(vm.Course.Id, csvText);
+
+			await DisplayAlert("Import Complete", $"{count} new student(s) imported.", "OK");
+			vm.Refresh();
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlert("Import Error", $"Failed to import: {ex.Message}", "OK");
+		}
+	}
+
 	private void GoBackClicked(object sender, EventArgs e)
 	{
 		Shell.Current.GoToAsync("//TeacherMenu");

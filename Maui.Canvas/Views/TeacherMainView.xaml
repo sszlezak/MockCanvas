@@ -32,6 +32,7 @@
 		</CollectionView>
 
 		<Button Text="Open Course" Clicked="OpenCourseClicked" />
+		<Button Text="Manage Students" Clicked="ManageStudentsClicked" />
 		<Button Text="Go Back" Clicked="GoBackClicked" />
 
 	</VerticalStackLayout>

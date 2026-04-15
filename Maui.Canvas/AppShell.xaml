@@ -67,4 +67,14 @@
         ContentTemplate="{DataTemplate views:AssignmentRefContentDetailView}"
         Route="AssignmentRefContentDetail" />
 
+	<ShellContent
+        Title="Student Management"
+        ContentTemplate="{DataTemplate views:StudentManagementView}"
+        Route="StudentManagement" />
+
+	<ShellContent
+        Title="Student Detail"
+        ContentTemplate="{DataTemplate views:StudentDetailView}"
+        Route="StudentDetail" />
+
 </Shell>

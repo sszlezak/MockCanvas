@@ -324,5 +324,25 @@ namespace Library.Canvas.Services
 			if (module == null || contentId == 0) return null;
 			return module.Content.FirstOrDefault(c => c.Id == contentId);
 		}
+
+		public void AddStudentToCourse(int courseId, int studentId) {
+			var stu = StudentServiceProxy.Current.GetById(studentId);
+			var course = GetById(courseId);
+			if (course == null) return;
+			if (stu == null) return;
+
+			if (!course.Roster.Contains(stu))
+			{
+				course.Roster.Add(stu);
+			}
+		}
+
+		public void RemoveStudentFromCourse(int courseId, int studentId) {
+			var stu = StudentServiceProxy.Current.GetById(studentId);
+			var course = GetById(courseId);
+			if (course == null) return;
+			if (stu == null) return;
+			course.Roster.Remove(stu);
+		}
 	}
 }

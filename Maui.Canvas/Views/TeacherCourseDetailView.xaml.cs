@@ -134,6 +134,33 @@ public partial class TeacherCourseDetailView : ContentPage
 		}
 	}
 
+	private void AddStudentClicked(object sender, EventArgs e)
+	{
+		var vm = BindingContext as TeacherCourseDetailViewModel;
+		if (vm?.Course == null) return;
+
+		var selected = vm.SelectedAvailableStudent;
+		if (selected == null)
+		{
+			DisplayAlert("No Student Selected", "Pick a student from the dropdown first.", "OK");
+			return;
+		}
+
+		CourseServiceProxy.Current.AddStudentToCourse(vm.Course.Id, selected.Id);
+		vm.Refresh();
+	}
+
+	private void RemoveStudentClicked(object sender, EventArgs e)
+	{
+		if (sender is Button btn && btn.CommandParameter is Student student) // assigns student to student of remove button
+		{
+			var vm = BindingContext as TeacherCourseDetailViewModel;
+			if (vm?.Course == null) return;
+			CourseServiceProxy.Current.RemoveStudentFromCourse(vm.Course.Id, student.Id);
+			vm.Refresh();
+		}
+	}
+
 	private void GoBackClicked(object sender, EventArgs e)
 	{
 		Shell.Current.GoToAsync("//TeacherMenu");

@@ -56,6 +56,27 @@ namespace Maui.Canvas.ViewModels
 			}
 		}
 
+		public ObservableCollection<Student> Roster
+		{
+			get
+			{
+				if (Course == null) return new ObservableCollection<Student>();
+				return new ObservableCollection<Student>(Course.Roster);
+			}
+		}
+
+		public ObservableCollection<Student> AvailableStudents
+		{
+			get
+			{
+				if (Course == null) return new ObservableCollection<Student>();
+				return new ObservableCollection<Student>(StudentServiceProxy.Current.Students
+				.Where(s => !Course.Roster.Any(r => r.Id == s.Id)));
+			}
+		}
+
+		public Student? SelectedAvailableStudent { get; set; }
+
 		public ObservableCollection<SubmissionEntry> Submissions
 		{
 			get
@@ -89,6 +110,8 @@ namespace Maui.Canvas.ViewModels
 			NotifyPropertyChanged("Assignments");
 			NotifyPropertyChanged("Submissions");
 			NotifyPropertyChanged("Modules");
+			NotifyPropertyChanged("Roster");
+			NotifyPropertyChanged("AvailableStudents");
 		}
 
 		public event PropertyChangedEventHandler? PropertyChanged;

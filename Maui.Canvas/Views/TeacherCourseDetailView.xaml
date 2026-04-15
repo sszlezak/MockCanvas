@@ -91,6 +91,33 @@
 			</CollectionView.ItemTemplate>
 		</CollectionView>
 
+		<!-- Roster Management -->
+		<Label Text="Manage Roster" FontAttributes="Bold" />
+
+		<CollectionView ItemsSource="{Binding Roster}">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Grid Padding="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="4*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Label Text="{Binding DisplayName}" VerticalOptions="Center" />
+						<Button Text="Remove"
+                                Grid.Column="1"
+                                Clicked="RemoveStudentClicked"
+                                CommandParameter="{Binding .}" />
+					</Grid>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Picker Title="Add a student..."
+                ItemsSource="{Binding AvailableStudents}"
+                ItemDisplayBinding="{Binding DisplayName}"
+                SelectedItem="{Binding SelectedAvailableStudent}" />
+
+		<Button Text="Add Student" Clicked="AddStudentClicked" />
 		<Button Text="Add New Assignment" Clicked="AddAssignmentClicked" />
 		<Button Text="Add New Module" Clicked="AddModuleClicked" />
 

@@ -118,6 +118,8 @@
                 SelectedItem="{Binding SelectedAvailableStudent}" />
 
 		<Button Text="Add Student" Clicked="AddStudentClicked" />
+		<Button Text="Export Roster (CSV)" Clicked="ExportRosterClicked" />
+		<Button Text="Import Roster (CSV)" Clicked="ImportRosterClicked" />
 		<Button Text="Add New Assignment" Clicked="AddAssignmentClicked" />
 		<Button Text="Add New Module" Clicked="AddModuleClicked" />
 

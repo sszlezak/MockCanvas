@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="API.Canvas/API.Canvas.csproj" Id="26a21104-0701-469e-818b-a8cbb6cd0323" />
   <Project Path="Library.Canvas/Library.Canvas.csproj" />
   <Project Path="Maui.Canvas/Maui.Canvas.csproj" />
 </Solution>

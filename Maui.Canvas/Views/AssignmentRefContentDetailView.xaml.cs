@@ -1,14 +1,12 @@
 using Library.Canvas.Model;
 using Library.Canvas.Services;
+using Maui.Canvas.ViewModels;
 
 namespace Maui.Canvas.Views;
 
 [QueryProperty(nameof(ContentId), "contentId")]
 public partial class AssignmentRefContentDetailView : ContentPage
 {
-	public static int CurrentCourseId { get; set; }
-	public static int CurrentModuleId { get; set; }
-
 	public int ContentId { get; set; }
 
 	public AssignmentRefContentDetailView()
@@ -26,13 +24,13 @@ public partial class AssignmentRefContentDetailView : ContentPage
 		else
 		{
 			moduleAssignment = CourseServiceProxy.Current
-				.GetModuleContentById(CurrentCourseId, CurrentModuleId, ContentId) as ModuleAssignment
+				.GetModuleContentById(ModuleDetailViewModel.CurrentCourseId, ModuleDetailViewModel.CurrentModuleId, ContentId) as ModuleAssignment
 				?? new ModuleAssignment();
 		}
 
 		BindingContext = moduleAssignment;
 
-		var course = CourseServiceProxy.Current.GetById(CurrentCourseId);
+		var course = CourseServiceProxy.Current.GetById(ModuleDetailViewModel.CurrentCourseId);
 		AssignmentPicker.ItemsSource = course?.Assignments;
 		AssignmentPicker.SelectedItem = moduleAssignment.Assignment;
 	}
@@ -44,14 +42,14 @@ public partial class AssignmentRefContentDetailView : ContentPage
 
 		moduleAssignment.Assignment = AssignmentPicker.SelectedItem as Assignment;
 
-		CourseServiceProxy.Current.AddOrUpdateModuleContent(CurrentCourseId, CurrentModuleId, moduleAssignment);
-		ModuleDetailView.CurrentCourseId = CurrentCourseId;
-		await Shell.Current.GoToAsync($"//ModuleDetail?moduleId={CurrentModuleId}");
+		CourseServiceProxy.Current.AddOrUpdateModuleContent(
+			ModuleDetailViewModel.CurrentCourseId,
+			ModuleDetailViewModel.CurrentModuleId, moduleAssignment);
+		await Shell.Current.GoToAsync("//ModuleDetail");
 	}
 
 	private async void GoBackClicked(object sender, EventArgs e)
 	{
-		ModuleDetailView.CurrentCourseId = CurrentCourseId;
-		await Shell.Current.GoToAsync($"//ModuleDetail?moduleId={CurrentModuleId}");
+		await Shell.Current.GoToAsync("//ModuleDetail");
 	}
 }

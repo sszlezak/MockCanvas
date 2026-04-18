@@ -1,38 +1,29 @@
 using Library.Canvas.Model;
 using Library.Canvas.Services;
+using Maui.Canvas.ViewModels;
 
 namespace Maui.Canvas.Views;
 
-[QueryProperty(nameof(ModuleId), "moduleId")]
 public partial class ModuleDetailView : ContentPage
 {
-	// Static parent context — set by TeacherCourseDetailView before navigating here.
-	public static int CurrentCourseId { get; set; }
-
-	public int ModuleId { get; set; }
+	private ModuleDetailViewModel ViewModel => BindingContext as ModuleDetailViewModel;
 
 	public ModuleDetailView()
 	{
 		InitializeComponent();
+		BindingContext = new ModuleDetailViewModel();
 	}
 
 	private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
 	{
-		if (ModuleId == 0)
-		{
-			BindingContext = new Module();
-		}
-		else
-		{
-			BindingContext = CourseServiceProxy.Current.GetModuleById(CurrentCourseId, ModuleId) ?? new Module();
-		}
+		// Every time we arrive at this page, reload from the proxy.
+		// This catches new content added by child detail views.
+		ViewModel?.Load();
 	}
 
 	private async void OkClicked(object sender, EventArgs e)
 	{
-		var module = BindingContext as Module;
-		var saved = CourseServiceProxy.Current.AddOrUpdateModule(CurrentCourseId, module);
-		if (saved != null) ModuleId = saved.Id;
+		ViewModel?.Save();
 		await Shell.Current.GoToAsync("//TeacherCourseDetail");
 	}
 
@@ -43,38 +34,30 @@ public partial class ModuleDetailView : ContentPage
 
 	private bool EnsureModuleSaved()
 	{
-		var module = BindingContext as Module;
-		if (module == null) return false;
+		if (ViewModel == null) return false;
 
-		if (module.Id == 0)
+		if (ModuleDetailViewModel.CurrentModuleId == 0)
 		{
-			var saved = CourseServiceProxy.Current.AddOrUpdateModule(CurrentCourseId, module);
-			if (saved != null) ModuleId = saved.Id;
+			ViewModel.Save();
 		}
-		return ModuleId != 0;
+		return ModuleDetailViewModel.CurrentModuleId != 0;
 	}
 
 	private async void AddPageClicked(object sender, EventArgs e)
 	{
 		if (!EnsureModuleSaved()) return;
-		PageContentDetailView.CurrentCourseId = CurrentCourseId;
-		PageContentDetailView.CurrentModuleId = ModuleId;
 		await Shell.Current.GoToAsync("//PageContentDetail?contentId=0");
 	}
 
 	private async void AddFileClicked(object sender, EventArgs e)
 	{
 		if (!EnsureModuleSaved()) return;
-		FileContentDetailView.CurrentCourseId = CurrentCourseId;
-		FileContentDetailView.CurrentModuleId = ModuleId;
 		await Shell.Current.GoToAsync("//FileContentDetail?contentId=0");
 	}
 
 	private async void AddAssignmentRefClicked(object sender, EventArgs e)
 	{
 		if (!EnsureModuleSaved()) return;
-		AssignmentRefContentDetailView.CurrentCourseId = CurrentCourseId;
-		AssignmentRefContentDetailView.CurrentModuleId = ModuleId;
 		await Shell.Current.GoToAsync("//AssignmentRefContentDetail?contentId=0");
 	}
 
@@ -85,18 +68,12 @@ public partial class ModuleDetailView : ContentPage
 		switch (content)
 		{
 			case ModulePage:
-				PageContentDetailView.CurrentCourseId = CurrentCourseId;
-				PageContentDetailView.CurrentModuleId = ModuleId;
 				await Shell.Current.GoToAsync($"//PageContentDetail?contentId={content.Id}");
 				break;
 			case ModuleFile:
-				FileContentDetailView.CurrentCourseId = CurrentCourseId;
-				FileContentDetailView.CurrentModuleId = ModuleId;
 				await Shell.Current.GoToAsync($"//FileContentDetail?contentId={content.Id}");
 				break;
 			case ModuleAssignment:
-				AssignmentRefContentDetailView.CurrentCourseId = CurrentCourseId;
-				AssignmentRefContentDetailView.CurrentModuleId = ModuleId;
 				await Shell.Current.GoToAsync($"//AssignmentRefContentDetail?contentId={content.Id}");
 				break;
 		}
@@ -110,7 +87,10 @@ public partial class ModuleDetailView : ContentPage
 			$"Delete '{content.Title}'?", "Delete", "Cancel");
 		if (!confirm) return;
 
-		CourseServiceProxy.Current.DeleteModuleContent(CurrentCourseId, ModuleId, content);
-		BindingContext = CourseServiceProxy.Current.GetModuleById(CurrentCourseId, ModuleId) ?? new Module();
+		CourseServiceProxy.Current.DeleteModuleContent(
+			ModuleDetailViewModel.CurrentCourseId,
+			ModuleDetailViewModel.CurrentModuleId,
+			content);
+		ViewModel?.Refresh();
 	}
 }

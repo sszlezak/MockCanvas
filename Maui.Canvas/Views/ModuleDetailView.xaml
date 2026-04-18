@@ -8,8 +8,7 @@
 	<ScrollView>
 		<VerticalStackLayout Padding="20" Spacing="10">
 
-			<Label Text="{Binding Id, StringFormat='Module {0}'}" FontAttributes="Bold" FontSize="20" />
-
+			<Label Text="{Binding ModuleTitle}" FontAttributes="Bold" FontSize="20" />
 			<Label Text="Module Content" FontAttributes="Bold" />
 
 			<CollectionView ItemsSource="{Binding Content}">

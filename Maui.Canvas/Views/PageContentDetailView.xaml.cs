@@ -1,14 +1,12 @@
 using Library.Canvas.Model;
 using Library.Canvas.Services;
+using Maui.Canvas.ViewModels;
 
 namespace Maui.Canvas.Views;
 
 [QueryProperty(nameof(ContentId), "contentId")]
 public partial class PageContentDetailView : ContentPage
 {
-	public static int CurrentCourseId { get; set; }
-	public static int CurrentModuleId { get; set; }
-
 	public int ContentId { get; set; }
 
 	public PageContentDetailView()
@@ -25,7 +23,7 @@ public partial class PageContentDetailView : ContentPage
 		else
 		{
 			BindingContext = CourseServiceProxy.Current
-				.GetModuleContentById(CurrentCourseId, CurrentModuleId, ContentId) as ModulePage
+				.GetModuleContentById(ModuleDetailViewModel.CurrentCourseId, ModuleDetailViewModel.CurrentModuleId, ContentId) as ModulePage
 				?? new ModulePage();
 		}
 	}
@@ -33,14 +31,14 @@ public partial class PageContentDetailView : ContentPage
 	private async void OkClicked(object sender, EventArgs e)
 	{
 		var page = BindingContext as ModulePage;
-		CourseServiceProxy.Current.AddOrUpdateModuleContent(CurrentCourseId, CurrentModuleId, page);
-		ModuleDetailView.CurrentCourseId = CurrentCourseId;
-		await Shell.Current.GoToAsync($"//ModuleDetail?moduleId={CurrentModuleId}");
+		CourseServiceProxy.Current.AddOrUpdateModuleContent(
+			ModuleDetailViewModel.CurrentCourseId,
+			ModuleDetailViewModel.CurrentModuleId, page);
+		await Shell.Current.GoToAsync("//ModuleDetail");
 	}
 
 	private async void GoBackClicked(object sender, EventArgs e)
 	{
-		ModuleDetailView.CurrentCourseId = CurrentCourseId;
-		await Shell.Current.GoToAsync($"//ModuleDetail?moduleId={CurrentModuleId}");
+		await Shell.Current.GoToAsync("//ModuleDetail");
 	}
 }

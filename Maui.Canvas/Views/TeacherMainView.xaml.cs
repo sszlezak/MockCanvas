@@ -1,3 +1,4 @@
+using Library.Canvas.Services;
 using Maui.Canvas.ViewModels;
 
 namespace Maui.Canvas.Views;
@@ -31,6 +32,19 @@ public partial class TeacherMainView : ContentPage
 	private async void ManageStudentsClicked(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("//StudentManagement");
+	}
+
+	private async void SaveDatesClicked(object sender, EventArgs e)
+	{
+		var vm = BindingContext as TeacherMainViewViewModel;
+		if (vm?.SelectedCourse == null)
+		{
+			await DisplayAlert("No Course Selected", "Select a course first.", "OK");
+			return;
+		}
+
+		CourseServiceProxy.Current.AddOrUpdate(vm.SelectedCourse);
+		await DisplayAlert("Saved", "Semester dates updated.", "OK");
 	}
 
 	private void GoBackClicked(object sender, EventArgs e)

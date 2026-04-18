@@ -33,6 +33,21 @@
 
 		<Button Text="Open Course" Clicked="OpenCourseClicked" />
 		<Button Text="Manage Students" Clicked="ManageStudentsClicked" />
+
+		<Label Text="Semester Settings" FontAttributes="Bold" />
+
+		<Picker Title="Select a course"
+					ItemsSource="{Binding Courses}"
+					ItemDisplayBinding="{Binding Name}"
+					SelectedItem="{Binding SelectedCourse}" />
+
+		<Label Text="Semester Start:" />
+		<DatePicker Date="{Binding SemesterStartDate}" />
+
+		<Label Text="Semester End:" />
+		<DatePicker Date="{Binding SemesterEndDate}" />
+
+		<Button Text="Save Dates" Clicked="SaveDatesClicked" />
 		<Button Text="Go Back" Clicked="GoBackClicked" />
 
 	</VerticalStackLayout>

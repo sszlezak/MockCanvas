@@ -14,6 +14,52 @@ namespace Maui.Canvas.ViewModels
 
 		public string CourseTitle => Course == null ? "" : $"{Course.Name} ({Course.Code})";
 
+		public DateTime SemesterStartDate
+		{
+			get => SelectedCourse?.SemesterStart ?? DateTime.Now;
+			set
+			{
+				if (SelectedCourse != null)
+				{
+					SelectedCourse.SemesterStart = value;
+					NotifyPropertyChanged();
+				}
+			}
+		}
+
+		public DateTime SemesterEndDate
+		{
+			get => SelectedCourse?.SemesterEnd ?? DateTime.Now;
+			set
+			{
+				if (SelectedCourse != null)
+				{
+					SelectedCourse.SemesterEnd = value;
+					NotifyPropertyChanged();
+				}
+			}
+		}
+
+		// When the teacher selects a different course, the date pickers
+		// need to update to show that course's dates
+		private Course? _selectedCourse;
+		public Course? SelectedCourse
+		{
+			get => _selectedCourse;
+			set
+			{
+				if (_selectedCourse != value)
+				{
+					_selectedCourse = value;
+					NotifyPropertyChanged();
+					// Tell the UI to re-read the date properties too
+					// since they depend on which course is selected
+					NotifyPropertyChanged("SemesterStartDate");
+					NotifyPropertyChanged("SemesterEndDate");
+				}
+			}
+		}
+
 		public ObservableCollection<AssignmentGroup> AssignmentGroups
 		{
 			get
@@ -140,6 +186,8 @@ namespace Maui.Canvas.ViewModels
 			NotifyPropertyChanged("Modules");
 			NotifyPropertyChanged("Roster");
 			NotifyPropertyChanged("AvailableStudents");
+			NotifyPropertyChanged("SemesterStartDate");
+			NotifyPropertyChanged("SemesterEndDate");
 		}
 
 		public event PropertyChangedEventHandler? PropertyChanged;

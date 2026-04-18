@@ -97,8 +97,9 @@ public partial class TeacherCourseDetailView : ContentPage
 		var vm = BindingContext as TeacherCourseDetailViewModel;
 		if (vm?.Course == null) return;
 
-		ModuleDetailView.CurrentCourseId = vm.Course.Id;
-		await Shell.Current.GoToAsync("//ModuleDetail?moduleId=0");
+		ModuleDetailViewModel.CurrentCourseId = vm.Course.Id;
+		ModuleDetailViewModel.CurrentModuleId = 0;
+		await Shell.Current.GoToAsync("//ModuleDetail");
 	}
 
 	private async void EditModuleClicked(object sender, EventArgs e)
@@ -108,8 +109,9 @@ public partial class TeacherCourseDetailView : ContentPage
 			var vm = BindingContext as TeacherCourseDetailViewModel;
 			if (vm?.Course == null) return;
 
-			ModuleDetailView.CurrentCourseId = vm.Course.Id;
-			await Shell.Current.GoToAsync($"//ModuleDetail?moduleId={module.Id}");
+			ModuleDetailViewModel.CurrentCourseId = vm.Course.Id;
+			ModuleDetailViewModel.CurrentModuleId = module.Id;
+			await Shell.Current.GoToAsync("//ModuleDetail");
 		}
 	}
 

@@ -94,6 +94,9 @@
 		<!-- Roster Management -->
 		<Label Text="Manage Roster" FontAttributes="Bold" />
 
+		<Entry Placeholder="Search roster..."
+               Text="{Binding RosterSearch}" />
+
 		<CollectionView ItemsSource="{Binding Roster}">
 			<CollectionView.ItemTemplate>
 				<DataTemplate>

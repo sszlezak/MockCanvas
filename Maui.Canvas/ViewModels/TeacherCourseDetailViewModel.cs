@@ -61,7 +61,35 @@ namespace Maui.Canvas.ViewModels
 			get
 			{
 				if (Course == null) return new ObservableCollection<Student>();
-				return new ObservableCollection<Student>(Course.Roster);
+
+				var filtered = Course.Roster.AsEnumerable();
+
+				if (!string.IsNullOrWhiteSpace(RosterSearch))
+				{
+					var search = RosterSearch.ToLower();
+					filtered = filtered.Where(s =>
+						(s.Name != null && s.Name.ToLower().Contains(search))
+						|| (s.Code != null && s.Code.ToLower().Contains(search))
+						|| (s.Classification != null && s.Classification.ToLower().Contains(search))
+					);
+				}
+
+				return new ObservableCollection<Student>(filtered);
+			}
+		}
+
+		private string? _rosterSearch;
+		public string? RosterSearch
+		{
+			get => _rosterSearch;
+			set
+			{
+				if (_rosterSearch != value)
+				{
+					_rosterSearch = value;
+					NotifyPropertyChanged();
+					NotifyPropertyChanged("Roster");
+				}
 			}
 		}
 

@@ -16,6 +16,8 @@ namespace Library.Canvas.Model
 		public List<Assignment> Assignments { get; set; } = new();
 		public List<AssignmentGroup> AssignmentGroups { get; set; } = new();
 
+		public List<string> Announcements { get; set; } = new();
+
 		public DateTime? SemesterStart { get; set; }
 		public DateTime? SemesterEnd { get; set; }
 

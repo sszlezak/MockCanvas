@@ -33,7 +33,12 @@ namespace API.Canvas.Database
 					Roster = new List<Student>
 					{
 						students[0], students[1], students[2]   // Alice, Bob, Carla
-                    }
+                    },
+					Announcements = new List<string>
+					{
+					"Homework 2 deadline extended to next Friday.",
+					"No class on Monday — enjoy the holiday."
+					}
 				},
 				new Course
 				{
@@ -46,7 +51,12 @@ namespace API.Canvas.Database
 					Roster = new List<Student>
 					{
 						students[0], students[3], students[4]   // Alice, Derek, Emily
-                    }
+                    },
+					Announcements = new List<string>
+					{
+						"Homework 3 deadline extended to next Monday.",
+						"No class on Friday - enjoy the holiday."
+					}
 				}
 			};
 		}

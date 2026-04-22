@@ -37,6 +37,8 @@ namespace Maui.Canvas.ViewModels
 		public ObservableCollection<Student> Roster { get; private set; } = new();
 		public ObservableCollection<AssignmentGradeRow> Grades { get; private set; } = new();
 
+		public ObservableCollection<string> Announcements { get; private set; } = new();
+
 		public string CourseTitle => Course == null ? "" : $"{Course.Name} ({Course.Code})";
 		public string CourseAverage { get; private set; } = "";
 		public string LetterGrade { get; private set; } = "";
@@ -52,6 +54,7 @@ namespace Maui.Canvas.ViewModels
 			Modules.Clear();
 			Roster.Clear();
 			Grades.Clear();
+			Announcements.Clear();
 
 			if (Course == null) return;
 
@@ -81,6 +84,9 @@ namespace Maui.Canvas.ViewModels
 
 			foreach (var student in Course.Roster)
 				Roster.Add(student);
+
+			foreach (var announcement in Course.Announcements)
+				Announcements.Add(announcement);
 
 			if (Student != null)
 			{

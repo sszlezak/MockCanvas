@@ -11,6 +11,21 @@
 				   FontAttributes="Bold"
 				   HorizontalOptions="Center" />
 
+			<!-- Announcements -->
+			<Label Text="Announcements" FontAttributes="Bold" />
+
+			<CollectionView ItemsSource="{Binding Announcements}">
+				<CollectionView.ItemTemplate>
+					<DataTemplate>
+						<Label Text="{Binding .}" Padding="5" />
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+
+			<Entry Placeholder="New announcement..."
+               Text="{Binding NewAnnouncement}" />
+			<Button Text="Post Announcement" Clicked="PostAnnouncementClicked" />
+
 			<!-- Assignment Groups / Weights -->
 			<Label Text="Assignment Groups" FontAttributes="Bold" />
 

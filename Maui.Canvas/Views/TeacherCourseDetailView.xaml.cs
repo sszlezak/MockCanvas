@@ -216,6 +216,18 @@ public partial class TeacherCourseDetailView : ContentPage
 		}
 	}
 
+	private void PostAnnouncementClicked(object sender, EventArgs e)
+	{
+		var vm = BindingContext as TeacherCourseDetailViewModel;
+		if (vm?.Course == null) return;
+
+		if (string.IsNullOrWhiteSpace(vm.NewAnnouncement)) return;
+
+		vm.Course.Announcements.Insert(0, vm.NewAnnouncement); // Add new announcement to the top of the list
+		vm.NewAnnouncement = "";
+		vm.Refresh();
+	}
+
 	private void GoBackClicked(object sender, EventArgs e)
 	{
 		Shell.Current.GoToAsync("//TeacherMenu");

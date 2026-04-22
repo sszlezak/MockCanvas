@@ -9,6 +9,17 @@
 
 		<Label Text="{Binding CourseTitle}" FontAttributes="Bold" HorizontalOptions="Center" />
 
+		<!-- Announcements -->
+		<Label Text="Announcements" FontAttributes="Bold" />
+
+		<CollectionView ItemsSource="{Binding Announcements}">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Label Text="{Binding .}" Padding="5" TextColor="Red" />
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
 		<!-- Letter Grade (Issue 6) -->
 		<Label Text="{Binding LetterGrade, StringFormat='Current Grade: {0}'}" FontAttributes="Bold" HorizontalOptions="Center" />
 		<Label Text="{Binding CourseAverage, StringFormat='Average: {0}'}" HorizontalOptions="Center" />

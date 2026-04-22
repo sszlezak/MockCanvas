@@ -93,6 +93,29 @@ namespace Maui.Canvas.ViewModels
 			}
 		}
 
+		public ObservableCollection<string> Announcements
+		{
+			get
+			{
+				if (Course == null) return new ObservableCollection<string>();
+				return new ObservableCollection<string>(Course.Announcements);
+			}
+		}
+
+		private string? _newAnnouncement;
+		public string? NewAnnouncement
+		{
+			get => _newAnnouncement;
+			set
+			{
+				if (_newAnnouncement != value)
+				{
+					_newAnnouncement = value;
+					NotifyPropertyChanged();
+				}
+			}
+		}
+
 		public ObservableCollection<Module> Modules
 		{
 			get
@@ -188,6 +211,7 @@ namespace Maui.Canvas.ViewModels
 			NotifyPropertyChanged("AvailableStudents");
 			NotifyPropertyChanged("SemesterStartDate");
 			NotifyPropertyChanged("SemesterEndDate");
+			NotifyPropertyChanged("Announcements");
 		}
 
 		public event PropertyChangedEventHandler? PropertyChanged;

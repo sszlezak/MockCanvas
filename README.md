@@ -1,2 +1,2 @@
 # MockCanvas
-My version of canvas built with C# and MAUI
+Learning management system(like Canvas) built with C# and MAUI

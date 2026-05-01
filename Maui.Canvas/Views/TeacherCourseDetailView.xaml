@@ -80,6 +80,13 @@
 				</CollectionView.ItemTemplate>
 			</CollectionView>
 
+			<!-- Copy Assignments From Another Course -->
+			<Label Text="Copy Assignments From:" FontAttributes="Bold" />
+			<Picker x:Name="CopySourcePicker"
+                Title="Select source course"
+                ItemDisplayBinding="{Binding Name}" />
+			<Button Text="Copy Assignments" Clicked="CopyAssignmentsClicked" />
+
 			<!-- Module Management -->
 			<Label Text="Manage Modules" FontAttributes="Bold" />
 

@@ -34,8 +34,8 @@ namespace Library.Canvas.Services
 		{
 			// Instead of hardcoded seed data, fetch from the API.
 			var stringFromAPI = new WebRequestHandler().Get("/Student").Result;
-			students = JsonConvert.DeserializeObject<List<Student>>(stringFromAPI)
-				?? new List<Student>();
+			students = JsonConvert.DeserializeObject<List<Student>>(stringFromAPI, JsonHelper.Settings)
+			?? new List<Student>();
 		}
 
 		public int NextKey => Students.Any() ? Students.Max(s => s.Id) + 1 : 1;
@@ -52,8 +52,7 @@ namespace Library.Canvas.Services
 
 			// Send to the API. The server assigns the Id if new.
 			var stringFromAPI = new WebRequestHandler().Post("/Student", student).Result;
-			var studentFromAPI = JsonConvert.DeserializeObject<Student>(stringFromAPI);
-
+			var studentFromAPI = JsonConvert.DeserializeObject<Student>(stringFromAPI, JsonHelper.Settings);
 			if (studentFromAPI == null) return student;
 
 			var existing = students.FirstOrDefault(s => s.Id == studentFromAPI.Id);

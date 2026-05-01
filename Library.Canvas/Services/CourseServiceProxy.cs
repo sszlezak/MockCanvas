@@ -30,10 +30,10 @@ namespace Library.Canvas.Services
 
 		private CourseServiceProxy()
 		{
-			// Fetch courses from the API instead of hardcoding.
+			// Fetch courses from the API instead of hardcoding
 			var stringFromAPI = new WebRequestHandler().Get("/Course").Result;
-			courses = JsonConvert.DeserializeObject<List<Course>>(stringFromAPI)
-				?? new List<Course>();
+			courses = JsonConvert.DeserializeObject<List<Course>>(stringFromAPI, JsonHelper.Settings)
+			?? new List<Course>();
 		}
 
 		public int NextKey => Courses.Any() ? Courses.Max(c => c.Id) + 1 : 1;
@@ -49,7 +49,7 @@ namespace Library.Canvas.Services
 			if (course == null) return null;
 
 			var stringFromAPI = new WebRequestHandler().Post("/Course", course).Result;
-			var courseFromAPI = JsonConvert.DeserializeObject<Course>(stringFromAPI);
+			var courseFromAPI = JsonConvert.DeserializeObject<Course>(stringFromAPI, JsonHelper.Settings);
 
 			if (courseFromAPI == null) return course;
 
@@ -315,6 +315,36 @@ namespace Library.Canvas.Services
 
 			result.Add(current.ToString().Trim());
 			return result;
+		}
+
+		// Copy all assignments from one course to another
+		// Only copies the assignment definition, not student submissions
+		// Each copied assignment gets a new Id in the target course
+		public int CopyAssignments(int sourceCourseId, int targetCourseId)
+		{
+			var source = GetById(sourceCourseId);
+			var target = GetById(targetCourseId);
+			if (source == null || target == null) return 0;
+
+			int copied = 0;
+			foreach (var assignment in source.Assignments)
+			{
+				var copy = new Assignment
+				{
+					Id = 0, // will be assigned by AddOrUpdateAssignment
+					Name = assignment.Name,
+					Description = assignment.Description,
+					AvailablePoints = assignment.AvailablePoints,
+					DueDate = assignment.DueDate,
+					GroupId = assignment.GroupId
+					// Submissions intentionally not copied
+				};
+
+				AddOrUpdateAssignment(targetCourseId, copy);
+				copied++;
+			}
+
+			return copied;
 		}
 	}
 }

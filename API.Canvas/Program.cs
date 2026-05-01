@@ -6,7 +6,13 @@ namespace API.Canvas
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddControllers();
+			builder.Services.AddControllers()
+				.AddNewtonsoftJson(options =>
+				{
+					options.SerializerSettings.TypeNameHandling =
+						Newtonsoft.Json.TypeNameHandling.Auto;
+				});
+
 			builder.Services.AddOpenApi();
 
 			var app = builder.Build();

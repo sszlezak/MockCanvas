@@ -36,7 +36,7 @@ namespace Library.Canvas.Utility
 			{
 				using (var request = new HttpRequestMessage(HttpMethod.Post, fullUrl))
 				{
-					var json = JsonConvert.SerializeObject(obj);
+					var json = JsonConvert.SerializeObject(obj, Library.Canvas.Utility.JsonHelper.Settings);
 					using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
 					{
 						request.Content = stringContent;

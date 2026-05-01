@@ -1,6 +1,7 @@
 using Maui.Canvas.ViewModels;
 using Library.Canvas.Model;
 using Library.Canvas.Services;
+using System.Linq;
 
 namespace Maui.Canvas.Views;
 
@@ -15,6 +16,31 @@ public partial class TeacherCourseDetailView : ContentPage
 	private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
 	{
 		(BindingContext as TeacherCourseDetailViewModel)?.Refresh();
+
+		// Populate the copy-from picker with all courses EXCEPT the current one.
+		var vm = BindingContext as TeacherCourseDetailViewModel;
+		if (vm?.Course != null)
+		{
+			CopySourcePicker.ItemsSource = CourseServiceProxy.Current.Courses
+				.Where(c => c.Id != vm.Course.Id).ToList();
+		}
+	}
+
+	private async void CopyAssignmentsClicked(object sender, EventArgs e)
+	{
+		var vm = BindingContext as TeacherCourseDetailViewModel;
+		if (vm?.Course == null) return;
+
+		var source = CopySourcePicker.SelectedItem as Course;
+		if (source == null)
+		{
+			await DisplayAlert("No Course Selected", "Pick a course to copy from.", "OK");
+			return;
+		}
+
+		int count = CourseServiceProxy.Current.CopyAssignments(source.Id, vm.Course.Id);
+		await DisplayAlert("Copied", $"{count} assignment(s) copied.", "OK");
+		vm.Refresh();
 	}
 
 	private void SaveWeightClicked(object sender, EventArgs e)
